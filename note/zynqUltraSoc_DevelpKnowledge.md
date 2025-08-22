@@ -18,6 +18,19 @@
 `Zynq UltraScale+ MPSoC` 是 AMD 的第二代 Zynq 平台，将强大的处理系统（PS）与用户可编程逻辑（PL）集成在同一器件中。
 其处理系统采用 Arm® 主打的 Cortex®-A53 64 位四核或双核处理器，以及 Cortex-R5F 双核实时处理器。
 
+#### OCM(On Chip Memory) 
+
+这块 256 KB 的 RAM 阵列映射在高地址范围（0xFFFC_0000 到 0xFFFF_FFFF），
+以四个独立的 64 KB 存储块为粒度进行划分。
+每个存储块位于由 PMU（电源管理单元）控制的独立电源岛上。
+
+| Address Range       | Size  | Memory Bank |
+| ------------------- | ----- | ----------- |
+| FFFC_0000-FFFC_FFFF | 64 KB | 0           |
+| FFFD_0000-FFFD_FFFF | 64 KB | 1           |
+| FFFE_0000-FFFE_FFFF | 64 KB | 2           |
+| FFFF_0000-FFFF_FFFF | 64 KB | 3           |
+
 #### cortex-A53 启动流程分析
 
 ```mermaid
