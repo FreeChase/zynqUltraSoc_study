@@ -18,6 +18,18 @@
 `Zynq UltraScale+ MPSoC` 是 AMD 的第二代 Zynq 平台，将强大的处理系统（PS）与用户可编程逻辑（PL）集成在同一器件中。
 其处理系统采用 Arm® 主打的 Cortex®-A53 64 位四核或双核处理器，以及 Cortex-R5F 双核实时处理器。
 
+#### cortex-A53 启动流程分析
+
+```mermaid
+flowchart TD
+    A[boot.S] --> B[B _startup]
+    B --> C[ xil-crt0.S]
+    C --> D[ BL main]
+    D --> E[ main.c]
+
+```
+
+
 # 二、windows+sdk
 
 
