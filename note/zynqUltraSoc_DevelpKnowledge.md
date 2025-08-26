@@ -4,6 +4,10 @@
       - [OCM(On Chip Memory)](#ocmon-chip-memory)
       - [cortex-A53 启动流程分析](#cortex-a53-启动流程分析)
 - [二、windows+sdk](#二windowssdk)
+  - [基础知识](#基础知识)
+  - [启动文件详解](#启动文件详解)
+    - [translation\_table.S](#translation_tables)
+      - [MMU分为三级页表](#mmu分为三级页表)
 - [三、petalinux](#三petalinux)
     - [基本概念](#基本概念)
       - [启动文件](#启动文件)
@@ -76,18 +80,80 @@
 
 #### cortex-A53 启动流程分析
 
-```mermaid
-flowchart TD
-    A[boot.S] --> B[B _startup]
-    B --> C[ xil-crt0.S]
-    C --> D[ BL main]
-    D --> E[ main.c]
+```lua
++---------+       +-----------+       +-------------+       +-----------+
+| boot.S  | ----> | B _startup| ----> | xil-crt0.S   | ----> | BL main   |
++---------+       +-----------+       +-------------+       +-----------+
+                                                              |
+                                                              v
+                                                          +---------+
+                                                          | main.c  |
+                                                          +---------+
+
 
 ```
 
 
 # 二、windows+sdk
 
+## 基础知识
+
+1. 通过xsa可以单独生成FSBL工程和APP工程
+2. FSBL工程里面添加宏定义`FSBL_DEBUG_INFO`可以输出
+    ```ini
+    C/C++ Build -> Settings -> Symbols -> Defined symbols(-D) 增加工程宏定义
+    C/C++ Build -> Settings -> Inferred Options -> Software platform 增加编译选项
+    ```
+
+## 启动文件详解
+
+### translation_table.S
+
+#### MMU分为三级页表
+
+- 寻址地址由TCR_T0SZ确定,本工程为 2^(64-T0SZ(24)) = 2^40
+    ```c
+    /**********************************************
+    * Set up TCR_EL1
+    * Physical Address Size PS =  010 -> 44bits 16TB
+    * Granual Size TG0 = 00 -> 4KB
+    * size offset of the memory region T0SZ = 24 -> (region size 2^(64-24) = 2^40)
+    ***************************************************/
+    ldr     x1,=0x285800518
+    msr     TCR_EL1, x1
+
+    /*
+    TCR[5:0]为T0SZ,配置为 0x18 =24
+    */
+    ```
+- 这个translation_table.S文件，为**三级页表**设计，分别为MMUTableL0、MMUTableL1、MMUTableL2。
+  - 每及Table最大支持`9bit`寻址
+  -  MMUTableL0 **寻址unit**(`2^39bit=512GB`)
+     -  /* 0x0000_0000 -  0x7F_FFFF_FFFF */
+     -  /* 0x80_0000_0000 - 0xFF_FFFF_FFFF */
+  -  MMUTableL1 **寻址unit**(`2^30bit=1GB`)
+
+  -  MMUTableL2 **寻址unit**(`2^21bit=2MB`)
+
+    故本设计页表基本单元大小为**2MB**
+
+- 2
+
+    ```arm
+    .set Device,	0x409 | (1 << 53)| (1 << 54) |(0x0)	
+    ```
+    ```arm
+
+    .rept	0x0200			/* 0x8000_0000 - 0xBFFF_FFFF */
+    .8byte	SECT + Device		/* 1GB lower PL */
+    .set	SECT, SECT+0x200000
+    .endr
+
+    # 0x200(512) x 0x200000(2MB) = 1 GB
+    # 这个页表为Block,由Decive 确定, Device属性不带Cache，若要正常读写/执行程序，换成memory属性
+    # Block大小为0x200000,由(.set SECT, SECT+0x200000) 确定
+    # 
+    ```
 
 
 # 三、petalinux
