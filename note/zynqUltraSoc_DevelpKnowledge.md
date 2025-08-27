@@ -144,9 +144,9 @@
     ```
     ```arm
 
-    .rept	0x0200			/* 0x8000_0000 - 0xBFFF_FFFF */
-    .8byte	SECT + Device		/* 1GB lower PL */
-    .set	SECT, SECT+0x200000
+    .rept	0x0200			/* 跟.endr搭配，重复代码0x200次*/
+    .8byte	SECT + Device		/*声明一个8Byte空间，值为SECT + Device */
+    .set	SECT, SECT+0x200000	/*SECT =  SECT+0x200000*/
     .endr
 
     # 0x200(512) x 0x200000(2MB) = 1 GB
@@ -155,7 +155,7 @@
     # 
     ```
 
-
+## IDE_DEBUG_Register
 # 三、petalinux
 
 ### 基本概念
