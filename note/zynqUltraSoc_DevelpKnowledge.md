@@ -1,13 +1,16 @@
 
 - [前言](#前言)
-- [一丶架构](#一丶架构)
-      - [OCM(On Chip Memory)](#ocmon-chip-memory)
-      - [cortex-A53 启动流程分析](#cortex-a53-启动流程分析)
+- [一丶架构知识](#一丶架构知识)
+  - [OCM(On Chip Memory)](#ocmon-chip-memory)
+  - [cortex-A53 启动流程分析](#cortex-a53-启动流程分析)
 - [二、windows+sdk](#二windowssdk)
   - [基础知识](#基础知识)
   - [启动文件详解](#启动文件详解)
     - [translation\_table.S](#translation_tables)
       - [MMU分为三级页表](#mmu分为三级页表)
+  - [API](#api)
+    - [Image加载](#image加载)
+      - [PL\_BIT加载](#pl_bit加载)
   - [IDE\_DEBUG\_Register](#ide_debug_register)
 - [三、petalinux](#三petalinux)
     - [基本概念](#基本概念)
@@ -60,14 +63,14 @@
 
 `提示：以下是本篇文章正文内容，下面案例可供参考`
 
-# 一丶架构
+# 一丶架构知识
 
 简介<br>
 `Zynq UltraScale+ MPSoC` 是 AMD 的第二代 Zynq 平台，将强大的处理系统（PS）与用户可编程逻辑（PL）集成在同一器件中。
 其处理系统采用 Arm® 主打的 Cortex®-A53 64 位四核或双核处理器，以及 Cortex-R5F 双核实时处理器。
 其中Cortex-A53为ARM-v8A
 
-#### OCM(On Chip Memory) 
+## OCM(On Chip Memory) 
 
 这块 256 KB 的 RAM 阵列映射在高地址范围（0xFFFC_0000 到 0xFFFF_FFFF），
 以四个独立的 64 KB 存储块为粒度进行划分。
@@ -80,7 +83,7 @@
 | FFFE_0000-FFFE_FFFF | 64 KB | 2           |
 | FFFF_0000-FFFF_FFFF | 64 KB | 3           |
 
-#### cortex-A53 启动流程分析
+## cortex-A53 启动流程分析
 
 ```lua
 +---------+       +-----------+       +-------------+       +-----------+
@@ -156,6 +159,24 @@
     # Block大小为0x200000,由(.set SECT, SECT+0x200000) 确定
     # 
     ```
+
+## API
+
+### Image加载
+- `XFsbl_PartitionLoad`<br>
+    加载image文件，包括APU、RPU、PL、PMU
+  - `XFsbl_PartitionHeaderValidation`
+    - `XFsbl_ValidatePartitionHeader`
+  - `XFsbl_PartitionCopy`<br>
+    调用行为函数，copy具体数据，`DeviceOps.DeviceCopy`
+  - `XFsbl_PartitionValidation`
+#### PL_BIT加载
+
+- `XFsbl_ChunkedBSTxfer`
+  - 传输BIT文件数据给PL
+  - 传输完整BIT文件PL直接config down
+- XFsbl_PLWaitForDown
+  - 检测PL是否config down
 
 ## IDE_DEBUG_Register
 # 三、petalinux
