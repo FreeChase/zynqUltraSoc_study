@@ -3,6 +3,7 @@
 - [一丶架构知识](#一丶架构知识)
   - [OCM(On Chip Memory)](#ocmon-chip-memory)
   - [cortex-A53 启动流程分析](#cortex-a53-启动流程分析)
+  - [参考文件](#参考文件)
 - [二、windows+sdk](#二windowssdk)
   - [基础知识](#基础知识)
   - [启动文件详解](#启动文件详解)
@@ -11,6 +12,8 @@
   - [API](#api)
     - [Image加载](#image加载)
       - [PL\_BIT加载](#pl_bit加载)
+  - [移植适配](#移植适配)
+    - [中断初始化](#中断初始化)
   - [IDE\_DEBUG\_Register](#ide_debug_register)
 - [三、petalinux](#三petalinux)
     - [基本概念](#基本概念)
@@ -95,8 +98,10 @@
                                                           | main.c  |
                                                           +---------+
 
-
 ```
+## 参考文件
+
+
 
 
 # 二、windows+sdk
@@ -175,8 +180,16 @@
 - `XFsbl_ChunkedBSTxfer`
   - 传输BIT文件数据给PL
   - 传输完整BIT文件PL直接config down
-- XFsbl_PLWaitForDown
+- `XFsbl_PLWaitForDown`
   - 检测PL是否config down
+
+## 移植适配
+
+### 中断初始化
+
+
+
+
 
 ## IDE_DEBUG_Register
 # 三、petalinux
