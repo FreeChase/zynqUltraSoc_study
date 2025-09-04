@@ -114,6 +114,10 @@
     C/C++ Build -> Settings -> Symbols -> Defined symbols(-D) 增加工程宏定义
     C/C++ Build -> Settings -> Inferred Options -> Software platform 增加编译选项
     ```
+3. `-flto -ffat-lto-objects` 功能
+- flto：启用链接时优化，将优化从编译阶段推迟到链接阶段，以获得更好的性能和更小的代码体积。
+
+- ffat-lto-objects：用于兼容性，让 LTO 目标文件也能被传统工具（如 ar）正确处理，方便在大型项目中构建静态库。
 
 ## 启动文件详解
 
