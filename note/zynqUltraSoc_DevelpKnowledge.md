@@ -172,6 +172,10 @@
 ## API
 
 ### Image加载
+- `XFsbl_BootDeviceInitAndValidate`
+  - `XFsbl_ValidateHeader`
+  <br>加载启动报头(**ImageHeaderTable**)并验证
+  
 - `XFsbl_PartitionLoad`<br>
     加载image文件，包括APU、RPU、PL、PMU
   - `XFsbl_PartitionHeaderValidation`

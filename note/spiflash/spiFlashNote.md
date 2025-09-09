@@ -2,6 +2,8 @@
 
 # SPIFLASH调试笔记
 
+1. The effect of the command is immediate. The default address mode is three bytes, and the device returns to the default upon exiting the 4-byte address mode
+
 ## 命令
 
 
