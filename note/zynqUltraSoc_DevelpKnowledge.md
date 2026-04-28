@@ -17,7 +17,11 @@
     - [中断初始化](#中断初始化)
   - [IDE\_DEBUG\_Register](#ide_debug_register)
   - [开发中遇到的问题](#开发中遇到的问题)
-- [三、petalinux](#三petalinux)
+- [三、windows+vitis2025.1](#三windowsvitis20251)
+  - [基础知识](#基础知识-1)
+    - [导入例程](#导入例程)
+    - [GPIO用法](#gpio用法)
+- [四、petalinux](#四petalinux)
     - [基本概念](#基本概念)
       - [启动文件](#启动文件)
         - [1 BOOT.BIN](#1-bootbin)
@@ -211,7 +215,24 @@
 1. vitis 2025 Unified IDE 优化设置
     
     需要设置bsp.yaml、CMakeLists.txt、Makefile多个文件的优化参数，来改变最终的优化等级
-# 三、petalinux
+
+
+
+# 三、windows+vitis2025.1
+
+## 基础知识
+
+### 导入例程
+platform->settings->vitis-comp.json->driver->Import Examples
+
+### GPIO用法
+
+在PS端，只有一个GPIO控制器，也就是控制PS端GPIO，只需要对GPIO控制器初始化一次就好了，其他的通过对pin的调用来控制
+
+>[GPIO控制操作详解](otherMisc\vit2025.1_rfsoc_gpio用法.md)
+
+
+# 四、petalinux
 
 ### 基本概念
 
