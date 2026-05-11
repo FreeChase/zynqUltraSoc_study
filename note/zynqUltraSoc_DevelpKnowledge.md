@@ -19,8 +19,10 @@
   - [开发中遇到的问题](#开发中遇到的问题)
 - [三、windows+vitis2025.1](#三windowsvitis20251)
   - [基础知识](#基础知识-1)
-    - [导入例程](#导入例程)
+    - [导入例程（驱动）](#导入例程驱动)
+    - [导入例程（应用）](#导入例程应用)
     - [GPIO用法](#gpio用法)
+    - [解决fsbl停在汇编层次的问题](#解决fsbl停在汇编层次的问题)
 - [四、petalinux](#四petalinux)
     - [基本概念](#基本概念)
       - [启动文件](#启动文件)
@@ -222,8 +224,11 @@
 
 ## 基础知识
 
-### 导入例程
+### 导入例程（驱动）
 platform->settings->vitis-comp.json->driver->Import Examples
+
+### 导入例程（应用）
+左侧状态栏->Examples->选择想创建的例程
 
 ### GPIO用法
 
@@ -231,6 +236,9 @@ platform->settings->vitis-comp.json->driver->Import Examples
 
 >[GPIO控制操作详解](otherMisc\vit2025.1_rfsoc_gpio用法.md)
 
+### 解决fsbl停在汇编层次的问题
+
+在`src`目录下的`CMakeList`中增加`-g3`编译选项，即可在c层面步进
 
 # 四、petalinux
 
